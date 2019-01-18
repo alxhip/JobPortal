@@ -1,0 +1,8 @@
+com\job\dao\JobDAOImpl.class
+com\job\entity\Job.class
+com\job\entity\Application.class
+com\job\service\JobServiceImpl.class
+com\job\dao\JobDAO.class
+com\job\entity\Role.class
+com\job\entity\User.class
+com\job\service\JobService.class
