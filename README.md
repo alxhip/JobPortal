@@ -1,6 +1,6 @@
 This project is a multi module maven project. Modules are RestApi, Service and Web.
 
-Steps to run;
+Steps to run after creating database configurations;
 
 First please navigate to Job-Portal-Multi-Module folder and build the project as;
 
