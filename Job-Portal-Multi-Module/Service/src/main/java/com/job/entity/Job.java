@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "jobs")
+
 public class Job {
 
 	@Id
@@ -34,13 +35,13 @@ public class Job {
 	@Column(name = "publishedDate")
 	private Timestamp publishedDate;
 	
-	@JsonBackReference
+	@JsonBackReference(value="job-user")
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE,
 			CascadeType.REFRESH })
 	@JoinColumn(name = "users_id")
 	private User user;
 	
-	@JsonBackReference
+	@JsonBackReference(value="job-application")
 	@OneToMany(mappedBy="job",
 			   cascade= { CascadeType.MERGE,
 						 CascadeType.DETACH, CascadeType.REFRESH})
