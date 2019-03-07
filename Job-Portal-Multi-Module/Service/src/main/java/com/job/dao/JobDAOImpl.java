@@ -30,7 +30,7 @@ public class JobDAOImpl implements JobDAO {
 
 		Session currentSession = entityManager.unwrap(Session.class);
 
-		Query<Job> theQuery = currentSession.createQuery("from Job", Job.class);
+		Query<Job> theQuery = currentSession.createQuery("from Job order by publishedDate desc", Job.class);
 
 		List<Job> jobs = theQuery.getResultList();
 
@@ -73,7 +73,7 @@ public class JobDAOImpl implements JobDAO {
 	public List<Job> getJobsPulishedByUser(String username) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		Query<Job> theQuery = currentSession
-				.createQuery("select j from Job as j inner join j.user as u where u.username=:username", Job.class);
+				.createQuery("select j from Job as j inner join j.user as u where u.username=:username order by j.publishedDate desc", Job.class);
 		theQuery.setParameter("username", username);
 		List<Job> jobs = theQuery.getResultList();
 		return jobs;
@@ -118,11 +118,11 @@ public class JobDAOImpl implements JobDAO {
 
 		if (input != null && input.trim().length() > 0) {
 
-			theQuery = currentSession.createQuery("from Job where lower(description) like :input", Job.class);
+			theQuery = currentSession.createQuery("from Job where lower(description) like :input order by publishedDate desc", Job.class);
 			theQuery.setParameter("input", "%" + input.toLowerCase() + "%");
 
 		} else {
-			theQuery = currentSession.createQuery("from Job", Job.class);
+			theQuery = currentSession.createQuery("from Job order by publishedDate desc", Job.class);
 		}
 
 		List<Job> jobs = theQuery.getResultList();
