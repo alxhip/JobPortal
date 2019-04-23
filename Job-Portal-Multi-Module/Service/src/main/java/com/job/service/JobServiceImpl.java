@@ -10,18 +10,16 @@ import com.job.dao.JobDAO;
 import com.job.entity.Job;
 import com.job.entity.User;
 
-
-
 @Service
 public class JobServiceImpl implements JobService {
 
 	private JobDAO jobDAO;
-	
+
 	@Autowired
 	public JobServiceImpl(JobDAO thejobDAO) {
 		jobDAO = thejobDAO;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<Job> findAll() {
@@ -50,32 +48,31 @@ public class JobServiceImpl implements JobService {
 	public List<Job> getJobsPulishedByUser(String string) {
 		return jobDAO.getJobsPulishedByUser(string);
 	}
-	
+
 	@Override
 	@Transactional
 	public int getUserId(String username) {
 		return jobDAO.getUserId(username);
 	}
-	
+
 	@Override
 	@Transactional
 	public User getUser(int userId) {
 		return jobDAO.getUser(userId);
 	}
-	
+
 	@Override
 	@Transactional
 	public void createApplication(int userId, int jobId) {
 		jobDAO.createApllication(userId, jobId);
 	}
-	
-	
+
 	@Override
 	@Transactional
 	public void saveUser(User user) {
 		jobDAO.saveUser(user);
 	}
-	
+
 	@Override
 	@Transactional
 	public List<Job> searchJob(String input) {
@@ -87,11 +84,9 @@ public class JobServiceImpl implements JobService {
 		return jobDAO.hasAlreadyApplied(user, job);
 	}
 
-	
+	@Override
+	public List<Job> getJobsPulishedByUserId(Long id) {
+		return jobDAO.getJobsPulishedByUserId(id);
+	}
+
 }
-
-
-
-
-
-

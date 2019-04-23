@@ -66,14 +66,15 @@ public class JobDAOImpl implements JobDAO {
 		theQuery.setParameter("jobId", theId);
 
 		theQuery.executeUpdate();
-		
+
 	}
 
 	@Override
 	public List<Job> getJobsPulishedByUser(String username) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Job> theQuery = currentSession
-				.createQuery("select j from Job as j inner join j.user as u where u.username=:username order by j.publishedDate desc", Job.class);
+		Query<Job> theQuery = currentSession.createQuery(
+				"select j from Job as j inner join j.user as u where u.username=:username order by j.publishedDate desc",
+				Job.class);
 		theQuery.setParameter("username", username);
 		List<Job> jobs = theQuery.getResultList();
 		return jobs;
@@ -105,8 +106,8 @@ public class JobDAOImpl implements JobDAO {
 	@Override
 	public void saveUser(User user) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		user.setEnabled(true);
-		user.setRole(currentSession.get(Role.class, 1));
+//		user.setEnabled(true);
+//		user.setRole(currentSession.get(Role.class, 1));
 		currentSession.saveOrUpdate(user);
 	}
 
@@ -118,7 +119,8 @@ public class JobDAOImpl implements JobDAO {
 
 		if (input != null && input.trim().length() > 0) {
 
-			theQuery = currentSession.createQuery("from Job where lower(description) like :input order by publishedDate desc", Job.class);
+			theQuery = currentSession.createQuery(
+					"from Job where lower(description) like :input order by publishedDate desc", Job.class);
 			theQuery.setParameter("input", "%" + input.toLowerCase() + "%");
 
 		} else {
@@ -134,9 +136,20 @@ public class JobDAOImpl implements JobDAO {
 	@Override
 	public boolean hasAlreadyApplied(User user, Job job) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query theQuery =currentSession.createQuery("select 1 from Application where user=:user and job=:job");
+		Query theQuery = currentSession.createQuery("select 1 from Application where user=:user and job=:job");
 		theQuery.setParameter("user", user);
 		theQuery.setParameter("job", job);
 		return (theQuery.uniqueResult() != null);
+	}
+
+	@Override
+	public List<Job> getJobsPulishedByUserId(Long id) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<Job> theQuery = currentSession.createQuery(
+				"select j from Job as j inner join j.user as u where u.id=:id order by j.publishedDate desc",
+				Job.class);
+		theQuery.setParameter("id", id);
+		List<Job> jobs = theQuery.getResultList();
+		return jobs;
 	}
 }

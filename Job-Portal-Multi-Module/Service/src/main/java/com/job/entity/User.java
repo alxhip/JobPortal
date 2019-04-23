@@ -1,121 +1,121 @@
 package com.job.entity;
-
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import java.util.HashSet;
+import java.util.Set;
+ 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+ 
+import org.hibernate.annotations.NaturalId;
+ 
 @Entity
-@Table(name = "Users")
-public class User {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
-
-	@Column(name = "username")
-	private String username;
-
-	@Column(name = "password")
-	private String password;
-
-	@Column(name = "enabled")
-	private boolean enabled;
-
-	public boolean isEnabled() {
-		return enabled;
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+            "username"
+        }),
+        @UniqueConstraint(columnNames = {
+            "email"
+        })
+})
+public class User{
+  @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+ 
+    @NotBlank
+    @Size(min=3, max = 50)
+    private String name;
+ 
+    @NotBlank
+    @Size(min=3, max = 50)
+    private String username;
+ 
+    @NaturalId
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
+ 
+    @NotBlank
+    @Size(min=6, max = 100)
+    private String password;
+ 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", 
+      joinColumns = @JoinColumn(name = "user_id"), 
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+ 
+    public User() {}
+ 
+    public User(String name, String username, String email, String password) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+ 
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public String getUsername() {
+        return username;
+    }
+ 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+ 
+    public String getEmail() {
+        return email;
+    }
+ 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+ 
+    public String getPassword() {
+        return password;
+    }
+ 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+ 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+ 
+    @Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email=" + email + ", password="
+				+ password + ", roles=" + roles + "]";
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-	@JoinColumn(name = "role_id")
-	private Role role;
-
-	@OneToMany(mappedBy="user",
-			   cascade= { CascadeType.MERGE,
-						 CascadeType.DETACH, CascadeType.REFRESH})
-	private List<Application> applications;
-	
-
-	/*@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "Applications", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "job_id"))
-	private List<Job> jobs;*/
-	
-	public List<Application> getApplications() {
-		return applications;
-	}
-
-	public void setApplications(List<Application> applications) {
-		this.applications = applications;
-	}
-
-	@OneToMany(mappedBy="user",
-			   cascade= { CascadeType.MERGE,
-						 CascadeType.DETACH, CascadeType.REFRESH})
-	private List<Job> publishedJobs;
-
-	public List<Job> getPublishedJobs() {
-		return publishedJobs;
-	}
-
-	public void setPublishedJobs(List<Job> publishedJobs) {
-		this.publishedJobs = publishedJobs;
-	}
-
-	public User(String username, String password, Role role) {
-		this.enabled = true;
-		this.username = username;
-		this.password = password;
-		this.role = role;
-	}
-
-	public User() {
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	
-
+	public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

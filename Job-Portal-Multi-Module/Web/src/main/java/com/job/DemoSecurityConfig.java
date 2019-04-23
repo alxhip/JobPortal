@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -24,10 +26,10 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
 		auth.jdbcAuthentication().dataSource(dataSource)
-				.usersByUsernameQuery("select username,password, enabled from users where username=?")
+				.usersByUsernameQuery("select username,password, 1 from users where username=?")
 				.authoritiesByUsernameQuery(
-						"select u.username, r.code from roles r inner join users u on u.Role_ID=r.ID where username=?")
-				.passwordEncoder(NoOpPasswordEncoder.getInstance());
+						"select u.username, r.name from roles r inner join user_roles ur on r.id=ur.role_id inner join users u on u.id=ur.user_id where username=?")
+				.passwordEncoder(passwordEncoder());
 	}
 
 	@Override
@@ -41,6 +43,11 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	SessionRegistry sessionRegistry() {
 		return new SessionRegistryImpl();
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }

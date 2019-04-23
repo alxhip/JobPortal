@@ -19,6 +19,8 @@ public interface JobDAO {
 	
 	public List<Job> getJobsPulishedByUser(String string);
 	
+	public List<Job> getJobsPulishedByUserId(Long id);
+	
 	public int getUserId(String username);
 	
 	public User getUser(int theId);

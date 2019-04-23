@@ -107,8 +107,8 @@ public class Job {
 
 	@Override
 	public String toString() {
-		return "Jobs [id=" + id + ", Title=" + title + ", description=" + description + ", publishedDate="
-				+ publishedDate + "]";
+		return "Job [id=" + id + ", title=" + title + ", description=" + description + ", publishedDate="
+				+ publishedDate + ", user=" + user + ", applications=" + applications + "]";
 	}
 
 }

@@ -17,6 +17,8 @@ public interface JobService {
 	public void deleteById(int theId);
 
 	public List<Job> getJobsPulishedByUser(String string);
+	
+	public List<Job> getJobsPulishedByUserId(Long id);
 
 	public int getUserId(String username);
 	
